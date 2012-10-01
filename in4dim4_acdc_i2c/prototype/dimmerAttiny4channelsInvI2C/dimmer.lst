@@ -1,0 +1,1139 @@
+
+dimmer.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000005c0  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000006  00800060  000005c0  00000654  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000023  00800066  00800066  0000065a  2**0
+                  ALLOC
+  3 .stab         00001608  00000000  00000000  0000065c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  4 .stabstr      00000c16  00000000  00000000  00001c64  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	14 c0       	rjmp	.+40     	; 0x2a <__ctors_end>
+   2:	a5 c1       	rjmp	.+842    	; 0x34e <__vector_1>
+   4:	2b c0       	rjmp	.+86     	; 0x5c <__bad_interrupt>
+   6:	2a c0       	rjmp	.+84     	; 0x5c <__bad_interrupt>
+   8:	48 c0       	rjmp	.+144    	; 0x9a <__vector_4>
+   a:	28 c0       	rjmp	.+80     	; 0x5c <__bad_interrupt>
+   c:	27 c0       	rjmp	.+78     	; 0x5c <__bad_interrupt>
+   e:	26 c0       	rjmp	.+76     	; 0x5c <__bad_interrupt>
+  10:	25 c0       	rjmp	.+74     	; 0x5c <__bad_interrupt>
+  12:	24 c0       	rjmp	.+72     	; 0x5c <__bad_interrupt>
+  14:	23 c0       	rjmp	.+70     	; 0x5c <__bad_interrupt>
+  16:	22 c0       	rjmp	.+68     	; 0x5c <__bad_interrupt>
+  18:	21 c0       	rjmp	.+66     	; 0x5c <__bad_interrupt>
+  1a:	20 c0       	rjmp	.+64     	; 0x5c <__bad_interrupt>
+  1c:	1f c0       	rjmp	.+62     	; 0x5c <__bad_interrupt>
+  1e:	1c c2       	rjmp	.+1080   	; 0x458 <__vector_15>
+  20:	3b c2       	rjmp	.+1142   	; 0x498 <__vector_16>
+  22:	1c c0       	rjmp	.+56     	; 0x5c <__bad_interrupt>
+  24:	1b c0       	rjmp	.+54     	; 0x5c <__bad_interrupt>
+  26:	1a c0       	rjmp	.+52     	; 0x5c <__bad_interrupt>
+  28:	19 c0       	rjmp	.+50     	; 0x5c <__bad_interrupt>
+
+0000002a <__ctors_end>:
+  2a:	11 24       	eor	r1, r1
+  2c:	1f be       	out	0x3f, r1	; 63
+  2e:	cf ed       	ldi	r28, 0xDF	; 223
+  30:	cd bf       	out	0x3d, r28	; 61
+
+00000032 <__do_copy_data>:
+  32:	10 e0       	ldi	r17, 0x00	; 0
+  34:	a0 e6       	ldi	r26, 0x60	; 96
+  36:	b0 e0       	ldi	r27, 0x00	; 0
+  38:	e0 ec       	ldi	r30, 0xC0	; 192
+  3a:	f5 e0       	ldi	r31, 0x05	; 5
+  3c:	02 c0       	rjmp	.+4      	; 0x42 <__SREG__+0x3>
+  3e:	05 90       	lpm	r0, Z+
+  40:	0d 92       	st	X+, r0
+  42:	a6 36       	cpi	r26, 0x66	; 102
+  44:	b1 07       	cpc	r27, r17
+  46:	d9 f7       	brne	.-10     	; 0x3e <__SP_H__>
+
+00000048 <__do_clear_bss>:
+  48:	10 e0       	ldi	r17, 0x00	; 0
+  4a:	a6 e6       	ldi	r26, 0x66	; 102
+  4c:	b0 e0       	ldi	r27, 0x00	; 0
+  4e:	01 c0       	rjmp	.+2      	; 0x52 <.do_clear_bss_start>
+
+00000050 <.do_clear_bss_loop>:
+  50:	1d 92       	st	X+, r1
+
+00000052 <.do_clear_bss_start>:
+  52:	a9 38       	cpi	r26, 0x89	; 137
+  54:	b1 07       	cpc	r27, r17
+  56:	e1 f7       	brne	.-8      	; 0x50 <.do_clear_bss_loop>
+  58:	c7 d1       	rcall	.+910    	; 0x3e8 <main>
+  5a:	b0 c2       	rjmp	.+1376   	; 0x5bc <_exit>
+
+0000005c <__bad_interrupt>:
+  5c:	d1 cf       	rjmp	.-94     	; 0x0 <__vectors>
+
+0000005e <i2cReadFromRegister>:
+static volatile uint8_t i2cReg[REG_SIZE];
+//~ static volatile uint8_t indexReg=0;
+
+// A callback triggered when the i2c master attempts to read from a register.
+uint8_t i2cReadFromRegister(uint8_t reg)
+{
+  5e:	80 51       	subi	r24, 0x10	; 16
+  60:	84 30       	cpi	r24, 0x04	; 4
+  62:	30 f4       	brcc	.+12     	; 0x70 <i2cReadFromRegister+0x12>
+  64:	e8 2f       	mov	r30, r24
+  66:	f0 e0       	ldi	r31, 0x00	; 0
+  68:	ef 59       	subi	r30, 0x9F	; 159
+  6a:	ff 4f       	sbci	r31, 0xFF	; 255
+  6c:	80 81       	ld	r24, Z
+  6e:	08 95       	ret
+  70:	8e ee       	ldi	r24, 0xEE	; 238
+		reg=0xEE;
+	}
+	
+    return reg;
+
+}
+  72:	08 95       	ret
+
+00000074 <i2cWriteToRegister>:
+
+// A callback triggered when the i2c master attempts to write to a register.
+void i2cWriteToRegister(uint8_t reg, uint8_t value)
+{
+    if(reg >= 0 && reg < REG_SIZE)
+  74:	8a 30       	cpi	r24, 0x0A	; 10
+  76:	28 f4       	brcc	.+10     	; 0x82 <i2cWriteToRegister+0xe>
+        i2cReg[reg]=value;
+  78:	e8 2f       	mov	r30, r24
+  7a:	f0 e0       	ldi	r31, 0x00	; 0
+  7c:	e8 59       	subi	r30, 0x98	; 152
+  7e:	ff 4f       	sbci	r31, 0xFF	; 255
+  80:	60 83       	st	Z, r22
+  82:	08 95       	ret
+
+00000084 <delay_ms>:
+// very fat. An integer is enough for us:
+//
+// delay x milliseconds:
+void delay_ms(unsigned int xms)
+{
+        while(xms){
+  84:	07 c0       	rjmp	.+14     	; 0x94 <delay_ms+0x10>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  86:	ef e7       	ldi	r30, 0x7F	; 127
+  88:	f7 e0       	ldi	r31, 0x07	; 7
+  8a:	31 97       	sbiw	r30, 0x01	; 1
+  8c:	f1 f7       	brne	.-4      	; 0x8a <delay_ms+0x6>
+  8e:	00 c0       	rjmp	.+0      	; 0x90 <delay_ms+0xc>
+  90:	00 00       	nop
+                _delay_ms(0.96);
+                xms--;
+  92:	01 97       	sbiw	r24, 0x01	; 1
+// very fat. An integer is enough for us:
+//
+// delay x milliseconds:
+void delay_ms(unsigned int xms)
+{
+        while(xms){
+  94:	00 97       	sbiw	r24, 0x00	; 0
+  96:	b9 f7       	brne	.-18     	; 0x86 <delay_ms+0x2>
+                _delay_ms(0.96);
+                xms--;
+        }
+}
+  98:	08 95       	ret
+
+0000009a <__vector_4>:
+    
+    zero_cross();
+    
+}
+
+ISR(TIMER1_COMPA_vect){
+  9a:	1f 92       	push	r1
+  9c:	0f 92       	push	r0
+  9e:	0f b6       	in	r0, 0x3f	; 63
+  a0:	0f 92       	push	r0
+  a2:	11 24       	eor	r1, r1
+  a4:	2f 93       	push	r18
+  a6:	8f 93       	push	r24
+  a8:	9f 93       	push	r25
+
+
+    if (c2>0)      //Apres le 49 eme cycle, d'autre interruption arrivent (PB pas résolu) il faut donc empêcher le triac de s'allumer au 50 eme cycle car 50 = 0%
+  aa:	80 91 60 00 	lds	r24, 0x0060
+  ae:	88 23       	and	r24, r24
+  b0:	89 f1       	breq	.+98     	; 0x114 <__stack+0x35>
+
+
+        unsigned char sreg;
+
+        /* Save global interrupt flag */
+        sreg = SREG;
+  b2:	2f b7       	in	r18, 0x3f	; 63
+        /* Disable interrupts */
+        cli();
+  b4:	f8 94       	cli
+               
+        //~ OCR1A=retard[c2]; // new compare value
+        OCR1A=DELAY_COUNTER; // new compare value
+  b6:	86 e4       	ldi	r24, 0x46	; 70
+  b8:	90 e0       	ldi	r25, 0x00	; 0
+  ba:	9b bd       	out	0x2b, r25	; 43
+  bc:	8a bd       	out	0x2a, r24	; 42
+        
+        /* Restore global interrupt flag */
+        SREG = sreg;
+  be:	2f bf       	out	0x3f, r18	; 63
+
+        if(channel[0].current==c2){
+  c0:	80 91 60 00 	lds	r24, 0x0060
+  c4:	90 91 79 00 	lds	r25, 0x0079
+  c8:	98 17       	cp	r25, r24
+  ca:	11 f4       	brne	.+4      	; 0xd0 <__vector_4+0x36>
+            DIM0_PORT |= _BV(DIM0); //on
+  cc:	c0 9a       	sbi	0x18, 0	; 24
+  ce:	01 c0       	rjmp	.+2      	; 0xd2 <__vector_4+0x38>
+        }else{
+            DIM0_PORT &= ~_BV(DIM0); //off
+  d0:	c0 98       	cbi	0x18, 0	; 24
+        }
+
+        if(channel[1].current==c2){
+  d2:	80 91 60 00 	lds	r24, 0x0060
+  d6:	90 91 7d 00 	lds	r25, 0x007D
+  da:	98 17       	cp	r25, r24
+  dc:	11 f4       	brne	.+4      	; 0xe2 <__stack+0x3>
+            DIM1_PORT |= _BV(DIM1); //on
+  de:	c1 9a       	sbi	0x18, 1	; 24
+  e0:	01 c0       	rjmp	.+2      	; 0xe4 <__stack+0x5>
+        }else{
+            DIM1_PORT &= ~_BV(DIM1); //off
+  e2:	c1 98       	cbi	0x18, 1	; 24
+        }
+
+        if(channel[2].current==c2){
+  e4:	80 91 60 00 	lds	r24, 0x0060
+  e8:	90 91 81 00 	lds	r25, 0x0081
+  ec:	98 17       	cp	r25, r24
+  ee:	11 f4       	brne	.+4      	; 0xf4 <__stack+0x15>
+            DIM2_PORT |= _BV(DIM2); //on
+  f0:	c2 9a       	sbi	0x18, 2	; 24
+  f2:	01 c0       	rjmp	.+2      	; 0xf6 <__stack+0x17>
+        }else{
+            DIM2_PORT &= ~_BV(DIM2); //off
+  f4:	c2 98       	cbi	0x18, 2	; 24
+        }
+
+        if(channel[3].current==c2){
+  f6:	80 91 60 00 	lds	r24, 0x0060
+  fa:	90 91 85 00 	lds	r25, 0x0085
+  fe:	98 17       	cp	r25, r24
+ 100:	11 f4       	brne	.+4      	; 0x106 <__stack+0x27>
+            DIM3_PORT |= _BV(DIM3); //on
+ 102:	c3 9a       	sbi	0x18, 3	; 24
+ 104:	01 c0       	rjmp	.+2      	; 0x108 <__stack+0x29>
+        }else{
+            DIM3_PORT &= ~_BV(DIM3); //off
+ 106:	c3 98       	cbi	0x18, 3	; 24
+        }
+
+        c2--;
+ 108:	80 91 60 00 	lds	r24, 0x0060
+ 10c:	81 50       	subi	r24, 0x01	; 1
+ 10e:	80 93 60 00 	sts	0x0060, r24
+ 112:	07 c0       	rjmp	.+14     	; 0x122 <__stack+0x43>
+
+    }
+    else{
+
+        DIM0_PORT &= ~_BV(DIM0); //off
+ 114:	c0 98       	cbi	0x18, 0	; 24
+        DIM1_PORT &= ~_BV(DIM1); //off
+ 116:	c1 98       	cbi	0x18, 1	; 24
+        DIM2_PORT &= ~_BV(DIM2); //off
+ 118:	c2 98       	cbi	0x18, 2	; 24
+        DIM3_PORT &= ~_BV(DIM3); //off
+ 11a:	c3 98       	cbi	0x18, 3	; 24
+
+        TCCR1B &= ~(_BV(CS10) | _BV(CS11) | _BV(CS12)); // last interrupt, stop the timer
+ 11c:	8e b5       	in	r24, 0x2e	; 46
+ 11e:	88 7f       	andi	r24, 0xF8	; 248
+ 120:	8e bd       	out	0x2e, r24	; 46
+
+    }
+
+}
+ 122:	9f 91       	pop	r25
+ 124:	8f 91       	pop	r24
+ 126:	2f 91       	pop	r18
+ 128:	0f 90       	pop	r0
+ 12a:	0f be       	out	0x3f, r0	; 63
+ 12c:	0f 90       	pop	r0
+ 12e:	1f 90       	pop	r1
+ 130:	18 95       	reti
+
+00000132 <setup>:
+
+
+void setup(void) {    // Debut du setup
+
+    // initialise l'interruption de temps Timer0
+    TCCR1A = 0;
+ 132:	1f bc       	out	0x2f, r1	; 47
+    TCCR1B = 0;
+ 134:	1e bc       	out	0x2e, r1	; 46
+    TCCR1C = 0;
+ 136:	12 bc       	out	0x22, r1	; 34
+
+    OCR1A=0;
+ 138:	1b bc       	out	0x2b, r1	; 43
+ 13a:	1a bc       	out	0x2a, r1	; 42
+
+    // initialise interruption sur INT0
+    DDRD &= ~(1 << DDD2); // pin PD2 en entrée
+ 13c:	8a 98       	cbi	0x11, 2	; 17
+    MCUCR = (1 << ISC00)|(1 << ISC01); // front descendant
+ 13e:	83 e0       	ldi	r24, 0x03	; 3
+ 140:	85 bf       	out	0x35, r24	; 53
+    GIMSK  |= ( 1 << INT0 );  // Listen for INT
+ 142:	8b b7       	in	r24, 0x3b	; 59
+ 144:	80 64       	ori	r24, 0x40	; 64
+ 146:	8b bf       	out	0x3b, r24	; 59
+
+    sei();
+ 148:	78 94       	sei
+ 
+}   // Fin du setup
+ 14a:	08 95       	ret
+
+0000014c <zero_cross>:
+
+
+
+void zero_cross() {              // Fonction associee à l'interruption 0                          
+
+    c2=MAX_TIMER_INTERRUPTION;
+ 14c:	84 e6       	ldi	r24, 0x64	; 100
+ 14e:	80 93 60 00 	sts	0x0060, r24
+
+    unsigned char sreg;
+
+    /* Save global interrupt flag */
+    sreg = SREG;
+ 152:	2f b7       	in	r18, 0x3f	; 63
+    /* Disable interrupts */
+    cli();
+ 154:	f8 94       	cli
+           
+    OCR1A=OFFSET_TIME; // first compare value
+ 156:	8c ed       	ldi	r24, 0xDC	; 220
+ 158:	95 e0       	ldi	r25, 0x05	; 5
+ 15a:	9b bd       	out	0x2b, r25	; 43
+ 15c:	8a bd       	out	0x2a, r24	; 42
+ 
+    /* Restore global interrupt flag */
+    SREG = sreg;
+ 15e:	2f bf       	out	0x3f, r18	; 63
+    
+    TIMSK=(0<<TOIE1)|(1<<OCIE1A)|(0<<OCIE1B);           // activate the  comparator A
+ 160:	80 e4       	ldi	r24, 0x40	; 64
+ 162:	89 bf       	out	0x39, r24	; 57
+    TCCR1B=(0<<CS12)|(1<<CS11)|(0<<CS10)|(1<<WGM12);    // prescaler 1/8 and CTC mode   
+ 164:	8a e0       	ldi	r24, 0x0A	; 10
+ 166:	8e bd       	out	0x2e, r24	; 46
+
+
+      for (c1=0; c1 < MAX_CHANNEL; c1++){       // on parcourt les sorties pour verifier leur setpoint
+ 168:	10 92 67 00 	sts	0x0067, r1
+ 16c:	c9 c0       	rjmp	.+402    	; 0x300 <zero_cross+0x1b4>
+            
+            // fading: increase of light
+         if(channel[c1].fading_counter_setpoint){
+ 16e:	e0 91 67 00 	lds	r30, 0x0067
+ 172:	f0 e0       	ldi	r31, 0x00	; 0
+ 174:	ee 0f       	add	r30, r30
+ 176:	ff 1f       	adc	r31, r31
+ 178:	ee 0f       	add	r30, r30
+ 17a:	ff 1f       	adc	r31, r31
+ 17c:	e7 58       	subi	r30, 0x87	; 135
+ 17e:	ff 4f       	sbci	r31, 0xFF	; 255
+ 180:	82 81       	ldd	r24, Z+2	; 0x02
+ 182:	88 23       	and	r24, r24
+ 184:	09 f4       	brne	.+2      	; 0x188 <zero_cross+0x3c>
+ 186:	a1 c0       	rjmp	.+322    	; 0x2ca <zero_cross+0x17e>
+            if (channel[c1].current<channel[c1].setpoint){                                       // si la setpoint actuelle est inferieur a la setpoint demandee
+ 188:	a0 91 67 00 	lds	r26, 0x0067
+ 18c:	e0 91 67 00 	lds	r30, 0x0067
+ 190:	b0 e0       	ldi	r27, 0x00	; 0
+ 192:	aa 0f       	add	r26, r26
+ 194:	bb 1f       	adc	r27, r27
+ 196:	aa 0f       	add	r26, r26
+ 198:	bb 1f       	adc	r27, r27
+ 19a:	a7 58       	subi	r26, 0x87	; 135
+ 19c:	bf 4f       	sbci	r27, 0xFF	; 255
+ 19e:	f0 e0       	ldi	r31, 0x00	; 0
+ 1a0:	ee 0f       	add	r30, r30
+ 1a2:	ff 1f       	adc	r31, r31
+ 1a4:	ee 0f       	add	r30, r30
+ 1a6:	ff 1f       	adc	r31, r31
+ 1a8:	e7 58       	subi	r30, 0x87	; 135
+ 1aa:	ff 4f       	sbci	r31, 0xFF	; 255
+ 1ac:	9c 91       	ld	r25, X
+ 1ae:	81 81       	ldd	r24, Z+1	; 0x01
+ 1b0:	98 17       	cp	r25, r24
+ 1b2:	c8 f5       	brcc	.+114    	; 0x226 <zero_cross+0xda>
+                  channel[c1].fading_counter_current--;                                          // on decremente le compteur de transition
+ 1b4:	e0 91 67 00 	lds	r30, 0x0067
+ 1b8:	f0 e0       	ldi	r31, 0x00	; 0
+ 1ba:	ee 0f       	add	r30, r30
+ 1bc:	ff 1f       	adc	r31, r31
+ 1be:	ee 0f       	add	r30, r30
+ 1c0:	ff 1f       	adc	r31, r31
+ 1c2:	e7 58       	subi	r30, 0x87	; 135
+ 1c4:	ff 4f       	sbci	r31, 0xFF	; 255
+ 1c6:	83 81       	ldd	r24, Z+3	; 0x03
+ 1c8:	81 50       	subi	r24, 0x01	; 1
+ 1ca:	83 83       	std	Z+3, r24	; 0x03
+                  if (channel[c1].fading_counter_current<=0){                                    // et si celui ci est nul
+ 1cc:	e0 91 67 00 	lds	r30, 0x0067
+ 1d0:	f0 e0       	ldi	r31, 0x00	; 0
+ 1d2:	ee 0f       	add	r30, r30
+ 1d4:	ff 1f       	adc	r31, r31
+ 1d6:	ee 0f       	add	r30, r30
+ 1d8:	ff 1f       	adc	r31, r31
+ 1da:	e7 58       	subi	r30, 0x87	; 135
+ 1dc:	ff 4f       	sbci	r31, 0xFF	; 255
+ 1de:	83 81       	ldd	r24, Z+3	; 0x03
+ 1e0:	88 23       	and	r24, r24
+ 1e2:	09 f5       	brne	.+66     	; 0x226 <zero_cross+0xda>
+                        channel[c1].current++;                                                   // on incremente la setpoint actuelle pour tendre a se rapprocher de la setpoint demandee
+ 1e4:	e0 91 67 00 	lds	r30, 0x0067
+ 1e8:	f0 e0       	ldi	r31, 0x00	; 0
+ 1ea:	ee 0f       	add	r30, r30
+ 1ec:	ff 1f       	adc	r31, r31
+ 1ee:	ee 0f       	add	r30, r30
+ 1f0:	ff 1f       	adc	r31, r31
+ 1f2:	e7 58       	subi	r30, 0x87	; 135
+ 1f4:	ff 4f       	sbci	r31, 0xFF	; 255
+ 1f6:	80 81       	ld	r24, Z
+ 1f8:	8f 5f       	subi	r24, 0xFF	; 255
+ 1fa:	80 83       	st	Z, r24
+                        channel[c1].fading_counter_current=channel[c1].fading_counter_setpoint;  // et on re-initialise le compteur de transition
+ 1fc:	e0 91 67 00 	lds	r30, 0x0067
+ 200:	a0 91 67 00 	lds	r26, 0x0067
+ 204:	f0 e0       	ldi	r31, 0x00	; 0
+ 206:	ee 0f       	add	r30, r30
+ 208:	ff 1f       	adc	r31, r31
+ 20a:	ee 0f       	add	r30, r30
+ 20c:	ff 1f       	adc	r31, r31
+ 20e:	e7 58       	subi	r30, 0x87	; 135
+ 210:	ff 4f       	sbci	r31, 0xFF	; 255
+ 212:	b0 e0       	ldi	r27, 0x00	; 0
+ 214:	aa 0f       	add	r26, r26
+ 216:	bb 1f       	adc	r27, r27
+ 218:	aa 0f       	add	r26, r26
+ 21a:	bb 1f       	adc	r27, r27
+ 21c:	a7 58       	subi	r26, 0x87	; 135
+ 21e:	bf 4f       	sbci	r27, 0xFF	; 255
+ 220:	12 96       	adiw	r26, 0x02	; 2
+ 222:	8c 91       	ld	r24, X
+ 224:	83 83       	std	Z+3, r24	; 0x03
+                  }
+            }
+            // fading: decrease of light
+            if (channel[c1].current>channel[c1].setpoint){                                       // si la setpoint actuelle est superieur a la setpoint demandee
+ 226:	a0 91 67 00 	lds	r26, 0x0067
+ 22a:	e0 91 67 00 	lds	r30, 0x0067
+ 22e:	b0 e0       	ldi	r27, 0x00	; 0
+ 230:	aa 0f       	add	r26, r26
+ 232:	bb 1f       	adc	r27, r27
+ 234:	aa 0f       	add	r26, r26
+ 236:	bb 1f       	adc	r27, r27
+ 238:	a7 58       	subi	r26, 0x87	; 135
+ 23a:	bf 4f       	sbci	r27, 0xFF	; 255
+ 23c:	f0 e0       	ldi	r31, 0x00	; 0
+ 23e:	ee 0f       	add	r30, r30
+ 240:	ff 1f       	adc	r31, r31
+ 242:	ee 0f       	add	r30, r30
+ 244:	ff 1f       	adc	r31, r31
+ 246:	e7 58       	subi	r30, 0x87	; 135
+ 248:	ff 4f       	sbci	r31, 0xFF	; 255
+ 24a:	9c 91       	ld	r25, X
+ 24c:	81 81       	ldd	r24, Z+1	; 0x01
+ 24e:	89 17       	cp	r24, r25
+ 250:	08 f0       	brcs	.+2      	; 0x254 <zero_cross+0x108>
+ 252:	51 c0       	rjmp	.+162    	; 0x2f6 <zero_cross+0x1aa>
+                  channel[c1].fading_counter_current--;                                          // on decremente le compteur de transition
+ 254:	e0 91 67 00 	lds	r30, 0x0067
+ 258:	f0 e0       	ldi	r31, 0x00	; 0
+ 25a:	ee 0f       	add	r30, r30
+ 25c:	ff 1f       	adc	r31, r31
+ 25e:	ee 0f       	add	r30, r30
+ 260:	ff 1f       	adc	r31, r31
+ 262:	e7 58       	subi	r30, 0x87	; 135
+ 264:	ff 4f       	sbci	r31, 0xFF	; 255
+ 266:	83 81       	ldd	r24, Z+3	; 0x03
+ 268:	81 50       	subi	r24, 0x01	; 1
+ 26a:	83 83       	std	Z+3, r24	; 0x03
+                  if (channel[c1].fading_counter_current<=0){                                    // et si celui ci est nul
+ 26c:	e0 91 67 00 	lds	r30, 0x0067
+ 270:	f0 e0       	ldi	r31, 0x00	; 0
+ 272:	ee 0f       	add	r30, r30
+ 274:	ff 1f       	adc	r31, r31
+ 276:	ee 0f       	add	r30, r30
+ 278:	ff 1f       	adc	r31, r31
+ 27a:	e7 58       	subi	r30, 0x87	; 135
+ 27c:	ff 4f       	sbci	r31, 0xFF	; 255
+ 27e:	83 81       	ldd	r24, Z+3	; 0x03
+ 280:	88 23       	and	r24, r24
+ 282:	c9 f5       	brne	.+114    	; 0x2f6 <zero_cross+0x1aa>
+                        channel[c1].current--;                                                   // on decremente la setpoint actuelle pour tendre a se rapprocher de la setpoint demandee
+ 284:	e0 91 67 00 	lds	r30, 0x0067
+ 288:	f0 e0       	ldi	r31, 0x00	; 0
+ 28a:	ee 0f       	add	r30, r30
+ 28c:	ff 1f       	adc	r31, r31
+ 28e:	ee 0f       	add	r30, r30
+ 290:	ff 1f       	adc	r31, r31
+ 292:	e7 58       	subi	r30, 0x87	; 135
+ 294:	ff 4f       	sbci	r31, 0xFF	; 255
+ 296:	80 81       	ld	r24, Z
+ 298:	81 50       	subi	r24, 0x01	; 1
+ 29a:	80 83       	st	Z, r24
+                        channel[c1].fading_counter_current=channel[c1].fading_counter_setpoint;  // et on re-initialise le compteur de transition
+ 29c:	e0 91 67 00 	lds	r30, 0x0067
+ 2a0:	a0 91 67 00 	lds	r26, 0x0067
+ 2a4:	f0 e0       	ldi	r31, 0x00	; 0
+ 2a6:	ee 0f       	add	r30, r30
+ 2a8:	ff 1f       	adc	r31, r31
+ 2aa:	ee 0f       	add	r30, r30
+ 2ac:	ff 1f       	adc	r31, r31
+ 2ae:	e7 58       	subi	r30, 0x87	; 135
+ 2b0:	ff 4f       	sbci	r31, 0xFF	; 255
+ 2b2:	b0 e0       	ldi	r27, 0x00	; 0
+ 2b4:	aa 0f       	add	r26, r26
+ 2b6:	bb 1f       	adc	r27, r27
+ 2b8:	aa 0f       	add	r26, r26
+ 2ba:	bb 1f       	adc	r27, r27
+ 2bc:	a7 58       	subi	r26, 0x87	; 135
+ 2be:	bf 4f       	sbci	r27, 0xFF	; 255
+ 2c0:	12 96       	adiw	r26, 0x02	; 2
+ 2c2:	8c 91       	ld	r24, X
+ 2c4:	12 97       	sbiw	r26, 0x02	; 2
+ 2c6:	83 83       	std	Z+3, r24	; 0x03
+ 2c8:	16 c0       	rjmp	.+44     	; 0x2f6 <zero_cross+0x1aa>
+                  }
+            }
+         }else{
+            channel[c1].current=channel[c1].setpoint;
+ 2ca:	e0 91 67 00 	lds	r30, 0x0067
+ 2ce:	a0 91 67 00 	lds	r26, 0x0067
+ 2d2:	f0 e0       	ldi	r31, 0x00	; 0
+ 2d4:	ee 0f       	add	r30, r30
+ 2d6:	ff 1f       	adc	r31, r31
+ 2d8:	ee 0f       	add	r30, r30
+ 2da:	ff 1f       	adc	r31, r31
+ 2dc:	e7 58       	subi	r30, 0x87	; 135
+ 2de:	ff 4f       	sbci	r31, 0xFF	; 255
+ 2e0:	b0 e0       	ldi	r27, 0x00	; 0
+ 2e2:	aa 0f       	add	r26, r26
+ 2e4:	bb 1f       	adc	r27, r27
+ 2e6:	aa 0f       	add	r26, r26
+ 2e8:	bb 1f       	adc	r27, r27
+ 2ea:	a7 58       	subi	r26, 0x87	; 135
+ 2ec:	bf 4f       	sbci	r27, 0xFF	; 255
+ 2ee:	11 96       	adiw	r26, 0x01	; 1
+ 2f0:	8c 91       	ld	r24, X
+ 2f2:	11 97       	sbiw	r26, 0x01	; 1
+ 2f4:	80 83       	st	Z, r24
+    
+    TIMSK=(0<<TOIE1)|(1<<OCIE1A)|(0<<OCIE1B);           // activate the  comparator A
+    TCCR1B=(0<<CS12)|(1<<CS11)|(0<<CS10)|(1<<WGM12);    // prescaler 1/8 and CTC mode   
+
+
+      for (c1=0; c1 < MAX_CHANNEL; c1++){       // on parcourt les sorties pour verifier leur setpoint
+ 2f6:	80 91 67 00 	lds	r24, 0x0067
+ 2fa:	8f 5f       	subi	r24, 0xFF	; 255
+ 2fc:	80 93 67 00 	sts	0x0067, r24
+ 300:	80 91 67 00 	lds	r24, 0x0067
+ 304:	84 30       	cpi	r24, 0x04	; 4
+ 306:	08 f4       	brcc	.+2      	; 0x30a <zero_cross+0x1be>
+ 308:	32 cf       	rjmp	.-412    	; 0x16e <zero_cross+0x22>
+         }else{
+            channel[c1].current=channel[c1].setpoint;
+         }
+      }
+
+    if(channel[0].current==c2)
+ 30a:	80 91 60 00 	lds	r24, 0x0060
+ 30e:	90 91 79 00 	lds	r25, 0x0079
+ 312:	98 17       	cp	r25, r24
+ 314:	09 f4       	brne	.+2      	; 0x318 <zero_cross+0x1cc>
+        DIM0_PORT |= _BV(DIM0); //on
+ 316:	c0 9a       	sbi	0x18, 0	; 24
+
+    if(channel[1].current==c2)
+ 318:	80 91 60 00 	lds	r24, 0x0060
+ 31c:	90 91 7d 00 	lds	r25, 0x007D
+ 320:	98 17       	cp	r25, r24
+ 322:	09 f4       	brne	.+2      	; 0x326 <zero_cross+0x1da>
+        DIM1_PORT |= _BV(DIM1); //on
+ 324:	c1 9a       	sbi	0x18, 1	; 24
+
+    if(channel[2].current==c2)
+ 326:	80 91 60 00 	lds	r24, 0x0060
+ 32a:	90 91 81 00 	lds	r25, 0x0081
+ 32e:	98 17       	cp	r25, r24
+ 330:	09 f4       	brne	.+2      	; 0x334 <zero_cross+0x1e8>
+        DIM2_PORT |= _BV(DIM2); //on
+ 332:	c2 9a       	sbi	0x18, 2	; 24
+
+    if(channel[3].current==c2)
+ 334:	80 91 60 00 	lds	r24, 0x0060
+ 338:	90 91 85 00 	lds	r25, 0x0085
+ 33c:	98 17       	cp	r25, r24
+ 33e:	09 f4       	brne	.+2      	; 0x342 <zero_cross+0x1f6>
+        DIM3_PORT |= _BV(DIM3); //on
+ 340:	c3 9a       	sbi	0x18, 3	; 24
+
+    c2--;
+ 342:	80 91 60 00 	lds	r24, 0x0060
+ 346:	81 50       	subi	r24, 0x01	; 1
+ 348:	80 93 60 00 	sts	0x0060, r24
+
+}                                 // End of zero cross detection
+ 34c:	08 95       	ret
+
+0000034e <__vector_1>:
+                xms--;
+        }
+}
+
+
+ISR(INT0_vect){
+ 34e:	1f 92       	push	r1
+ 350:	0f 92       	push	r0
+ 352:	0f b6       	in	r0, 0x3f	; 63
+ 354:	0f 92       	push	r0
+ 356:	11 24       	eor	r1, r1
+ 358:	2f 93       	push	r18
+ 35a:	3f 93       	push	r19
+ 35c:	4f 93       	push	r20
+ 35e:	5f 93       	push	r21
+ 360:	6f 93       	push	r22
+ 362:	7f 93       	push	r23
+ 364:	8f 93       	push	r24
+ 366:	9f 93       	push	r25
+ 368:	af 93       	push	r26
+ 36a:	bf 93       	push	r27
+ 36c:	ef 93       	push	r30
+ 36e:	ff 93       	push	r31
+    
+    zero_cross();
+ 370:	ed de       	rcall	.-550    	; 0x14c <zero_cross>
+    
+}
+ 372:	ff 91       	pop	r31
+ 374:	ef 91       	pop	r30
+ 376:	bf 91       	pop	r27
+ 378:	af 91       	pop	r26
+ 37a:	9f 91       	pop	r25
+ 37c:	8f 91       	pop	r24
+ 37e:	7f 91       	pop	r23
+ 380:	6f 91       	pop	r22
+ 382:	5f 91       	pop	r21
+ 384:	4f 91       	pop	r20
+ 386:	3f 91       	pop	r19
+ 388:	2f 91       	pop	r18
+ 38a:	0f 90       	pop	r0
+ 38c:	0f be       	out	0x3f, r0	; 63
+ 38e:	0f 90       	pop	r0
+ 390:	1f 90       	pop	r1
+ 392:	18 95       	reti
+
+00000394 <initChannel>:
+}
+
+int initChannel(void){ //on initialise les paramètres de chaque channel.
+
+    // mode output
+    DIM0_DDR |= _BV(DIM0);
+ 394:	b8 9a       	sbi	0x17, 0	; 23
+    DIM1_DDR |= _BV(DIM1);
+ 396:	b9 9a       	sbi	0x17, 1	; 23
+    DIM2_DDR |= _BV(DIM2);
+ 398:	ba 9a       	sbi	0x17, 2	; 23
+    DIM3_DDR |= _BV(DIM3);
+ 39a:	bb 9a       	sbi	0x17, 3	; 23
+        
+    // configuration du channel 0
+    channel[0].current=0;
+ 39c:	10 92 79 00 	sts	0x0079, r1
+    channel[0].setpoint=10;
+ 3a0:	8a e0       	ldi	r24, 0x0A	; 10
+ 3a2:	80 93 7a 00 	sts	0x007A, r24
+    channel[0].fading_counter_current=channel[0].fading_counter_setpoint=20;              //100 passages à zéro par secondes et 50 valeurs de setpoint possible donc pour 0 à 100% chauqe incrément de fading_counter_setpoint vaut une demi seconde
+ 3a6:	84 e1       	ldi	r24, 0x14	; 20
+ 3a8:	80 93 7b 00 	sts	0x007B, r24
+ 3ac:	80 93 7c 00 	sts	0x007C, r24
+
+    // configuration du channel 1
+    channel[1].current=0;
+ 3b0:	10 92 7d 00 	sts	0x007D, r1
+    channel[1].setpoint=5;
+ 3b4:	85 e0       	ldi	r24, 0x05	; 5
+ 3b6:	80 93 7e 00 	sts	0x007E, r24
+    channel[1].fading_counter_current=channel[1].fading_counter_setpoint=5;
+ 3ba:	80 93 7f 00 	sts	0x007F, r24
+ 3be:	80 93 80 00 	sts	0x0080, r24
+
+    // configuration du channel 2
+    channel[2].current=0;
+ 3c2:	10 92 81 00 	sts	0x0081, r1
+    channel[2].setpoint=0;
+ 3c6:	10 92 82 00 	sts	0x0082, r1
+    channel[2].fading_counter_current=channel[2].fading_counter_setpoint=5;
+ 3ca:	80 93 83 00 	sts	0x0083, r24
+ 3ce:	80 93 84 00 	sts	0x0084, r24
+
+    // configuration du channel 3
+    channel[3].current=0;
+ 3d2:	10 92 85 00 	sts	0x0085, r1
+    channel[3].setpoint=0;
+ 3d6:	10 92 86 00 	sts	0x0086, r1
+    channel[3].fading_counter_current=channel[3].fading_counter_setpoint=5;
+ 3da:	80 93 87 00 	sts	0x0087, r24
+ 3de:	80 93 88 00 	sts	0x0088, r24
+
+    return 0;
+
+}
+ 3e2:	80 e0       	ldi	r24, 0x00	; 0
+ 3e4:	90 e0       	ldi	r25, 0x00	; 0
+ 3e6:	08 95       	ret
+
+000003e8 <main>:
+                       // Main Loop
+int main(void)
+{   
+
+    /* enable pin as output */
+    LED_DDR|= (1<<LEDDDRPIN);
+ 3e8:	8c 9a       	sbi	0x11, 4	; 17
+        
+    setup();
+ 3ea:	a3 de       	rcall	.-698    	; 0x132 <setup>
+    initChannel();
+ 3ec:	d3 df       	rcall	.-90     	; 0x394 <initChannel>
+ 3ee:	80 e0       	ldi	r24, 0x00	; 0
+ 3f0:	90 e0       	ldi	r25, 0x00	; 0
+ 3f2:	28 2f       	mov	r18, r24
+ 3f4:	2f 5f       	subi	r18, 0xFF	; 255
+
+    for(uint8_t i=0; i< REG_SIZE; i++){
+        i2cReg[i]=i+1;
+ 3f6:	fc 01       	movw	r30, r24
+ 3f8:	e8 59       	subi	r30, 0x98	; 152
+ 3fa:	ff 4f       	sbci	r31, 0xFF	; 255
+ 3fc:	20 83       	st	Z, r18
+ 3fe:	01 96       	adiw	r24, 0x01	; 1
+    LED_DDR|= (1<<LEDDDRPIN);
+        
+    setup();
+    initChannel();
+
+    for(uint8_t i=0; i< REG_SIZE; i++){
+ 400:	8a 30       	cpi	r24, 0x0A	; 10
+ 402:	91 05       	cpc	r25, r1
+ 404:	b1 f7       	brne	.-20     	; 0x3f2 <main+0xa>
+        i2cReg[i]=i+1;
+    }
+
+        
+    usiTwiSlaveInit(I2C_SLAVE_ADDR, i2cReadFromRegister, i2cWriteToRegister);
+ 406:	86 e2       	ldi	r24, 0x26	; 38
+ 408:	6f e2       	ldi	r22, 0x2F	; 47
+ 40a:	70 e0       	ldi	r23, 0x00	; 0
+ 40c:	4a e3       	ldi	r20, 0x3A	; 58
+ 40e:	50 e0       	ldi	r21, 0x00	; 0
+ 410:	0e d0       	rcall	.+28     	; 0x42e <usiTwiSlaveInit>
+
+    sei();
+ 412:	78 94       	sei
+        // set output to 5V, LED on
+        //~ LED_PORT|= _BV(LED);
+        //~ delay_ms(1000);
+
+        // led off, pin=0
+        LED_PORT &= ~_BV(LED);
+ 414:	94 98       	cbi	0x12, 4	; 18
+
+        delay_ms(1000);
+ 416:	88 ee       	ldi	r24, 0xE8	; 232
+ 418:	93 e0       	ldi	r25, 0x03	; 3
+ 41a:	34 de       	rcall	.-920    	; 0x84 <delay_ms>
+        
+        
+        channel[0].setpoint=i2cReg[CHANNEL0_SP];
+ 41c:	80 91 69 00 	lds	r24, 0x0069
+ 420:	80 93 7a 00 	sts	0x007A, r24
+        channel[0].fading_counter_setpoint=i2cReg[CHANNEL0_FADE];
+ 424:	80 91 6a 00 	lds	r24, 0x006A
+ 428:	80 93 7b 00 	sts	0x007B, r24
+ 42c:	f3 cf       	rjmp	.-26     	; 0x414 <main+0x2c>
+
+0000042e <usiTwiSlaveInit>:
+    uint8_t (*onI2CReadFromRegister)(uint8_t reg),
+    void (*onI2CWriteToRegister)(uint8_t reg, uint8_t value)
+)
+{
+
+  slaveAddress = ownAddress;
+ 42e:	80 93 74 00 	sts	0x0074, r24
+  _onI2CReadFromRegister = onI2CReadFromRegister;
+ 432:	70 93 76 00 	sts	0x0076, r23
+ 436:	60 93 75 00 	sts	0x0075, r22
+  _onI2CWriteToRegister = onI2CWriteToRegister;
+ 43a:	50 93 78 00 	sts	0x0078, r21
+ 43e:	40 93 77 00 	sts	0x0077, r20
+  // low when a start condition is detected or a counter overflow (only
+  // for USIWM1, USIWM0 = 11).  This inserts a wait state.  SCL is released
+  // by the ISRs (USI_START_vect and USI_OVERFLOW_vect).
+
+  // Set SCL and SDA as output
+  DDR_USI |= ( 1 << PORT_USI_SCL ) | ( 1 << PORT_USI_SDA );
+ 442:	87 b3       	in	r24, 0x17	; 23
+ 444:	80 6a       	ori	r24, 0xA0	; 160
+ 446:	87 bb       	out	0x17, r24	; 23
+
+  // set SCL high
+  PORT_USI |= ( 1 << PORT_USI_SCL );
+ 448:	c7 9a       	sbi	0x18, 7	; 24
+
+  // set SDA high
+  PORT_USI |= ( 1 << PORT_USI_SDA );
+ 44a:	c5 9a       	sbi	0x18, 5	; 24
+
+  // Set SDA as input
+  DDR_USI &= ~( 1 << PORT_USI_SDA );
+ 44c:	bd 98       	cbi	0x17, 5	; 23
+
+  USICR =
+ 44e:	88 ea       	ldi	r24, 0xA8	; 168
+ 450:	8d b9       	out	0x0d, r24	; 13
+       // no toggle clock-port pin
+       ( 0 << USITC );
+
+  // clear all interrupt flags and reset overflow counter
+
+  USISR = ( 1 << USI_START_COND_INT ) | ( 1 << USIOIF ) | ( 1 << USIPF ) | ( 1 << USIDC );
+ 452:	80 ef       	ldi	r24, 0xF0	; 240
+ 454:	8e b9       	out	0x0e, r24	; 14
+
+} // end usiTwiSlaveInit
+ 456:	08 95       	ret
+
+00000458 <__vector_15>:
+                            USI Start Condition ISR
+
+********************************************************************************/
+
+ISR( USI_START_VECTOR )
+{
+ 458:	1f 92       	push	r1
+ 45a:	0f 92       	push	r0
+ 45c:	0f b6       	in	r0, 0x3f	; 63
+ 45e:	0f 92       	push	r0
+ 460:	11 24       	eor	r1, r1
+ 462:	8f 93       	push	r24
+  // set default starting conditions for new TWI package
+  overflowState = USI_SLAVE_CHECK_ADDRESS;
+ 464:	10 92 73 00 	sts	0x0073, r1
+ 468:	10 92 72 00 	sts	0x0072, r1
+
+  // set SDA as input
+  DDR_USI &= ~( 1 << PORT_USI_SDA );
+ 46c:	bd 98       	cbi	0x17, 5	; 23
+  // wait for SCL to go low to ensure the Start Condition has completed (the
+  // start detector will hold SCL low ) - if a Stop Condition arises then leave
+  // the interrupt to prevent waiting forever - don't use USISR to test for Stop
+  // Condition as in Application Note AVR312 because the Stop Condition Flag is
+  // going to be set from the last TWI sequence
+  while (
+ 46e:	b7 9b       	sbis	0x16, 7	; 22
+ 470:	02 c0       	rjmp	.+4      	; 0x476 <__vector_15+0x1e>
+       // SCL his high
+       ( PIN_USI & ( 1 << PIN_USI_SCL ) ) &&
+ 472:	b5 9b       	sbis	0x16, 5	; 22
+ 474:	fc cf       	rjmp	.-8      	; 0x46e <__vector_15+0x16>
+       // and SDA is low
+       !( ( PIN_USI & ( 1 << PIN_USI_SDA ) ) )
+  );
+
+
+  if ( !( PIN_USI & ( 1 << PIN_USI_SDA ) ) )
+ 476:	b5 99       	sbic	0x16, 5	; 22
+ 478:	02 c0       	rjmp	.+4      	; 0x47e <__vector_15+0x26>
+  {
+    // a Stop Condition did not occur
+    USICR =
+ 47a:	88 ef       	ldi	r24, 0xF8	; 248
+ 47c:	04 c0       	rjmp	.+8      	; 0x486 <__vector_15+0x2e>
+         ( 0 << USITC );
+
+  }
+  else
+  {
+    currentRegister = NO_CURRENT_REGISTER_SET;
+ 47e:	8f ef       	ldi	r24, 0xFF	; 255
+ 480:	80 93 65 00 	sts	0x0065, r24
+
+    // a Stop Condition did occur
+    USICR =
+ 484:	88 ea       	ldi	r24, 0xA8	; 168
+ 486:	8d b9       	out	0x0d, r24	; 13
+         // no toggle clock-port pin
+         ( 0 << USITC );
+
+  } // end if
+
+  USISR =
+ 488:	80 ef       	ldi	r24, 0xF0	; 240
+ 48a:	8e b9       	out	0x0e, r24	; 14
+       ( 1 << USI_START_COND_INT ) | ( 1 << USIOIF ) |
+       ( 1 << USIPF ) |( 1 << USIDC ) |
+       // set USI to sample 8 bits (count 16 external SCL pin toggles)
+       ( 0x0 << USICNT0);
+
+} // end ISR( USI_START_VECTOR )
+ 48c:	8f 91       	pop	r24
+ 48e:	0f 90       	pop	r0
+ 490:	0f be       	out	0x3f, r0	; 63
+ 492:	0f 90       	pop	r0
+ 494:	1f 90       	pop	r1
+ 496:	18 95       	reti
+
+00000498 <__vector_16>:
+Only disabled when waiting for a new Start Condition.
+
+********************************************************************************/
+
+ISR( USI_OVERFLOW_VECTOR )
+{
+ 498:	1f 92       	push	r1
+ 49a:	0f 92       	push	r0
+ 49c:	0f b6       	in	r0, 0x3f	; 63
+ 49e:	0f 92       	push	r0
+ 4a0:	11 24       	eor	r1, r1
+ 4a2:	2f 93       	push	r18
+ 4a4:	3f 93       	push	r19
+ 4a6:	4f 93       	push	r20
+ 4a8:	5f 93       	push	r21
+ 4aa:	6f 93       	push	r22
+ 4ac:	7f 93       	push	r23
+ 4ae:	8f 93       	push	r24
+ 4b0:	9f 93       	push	r25
+ 4b2:	af 93       	push	r26
+ 4b4:	bf 93       	push	r27
+ 4b6:	ef 93       	push	r30
+ 4b8:	ff 93       	push	r31
+
+  switch ( overflowState )
+ 4ba:	80 91 72 00 	lds	r24, 0x0072
+ 4be:	90 91 73 00 	lds	r25, 0x0073
+ 4c2:	82 30       	cpi	r24, 0x02	; 2
+ 4c4:	91 05       	cpc	r25, r1
+ 4c6:	e1 f1       	breq	.+120    	; 0x540 <__vector_16+0xa8>
+ 4c8:	83 30       	cpi	r24, 0x03	; 3
+ 4ca:	91 05       	cpc	r25, r1
+ 4cc:	38 f4       	brcc	.+14     	; 0x4dc <__vector_16+0x44>
+ 4ce:	00 97       	sbiw	r24, 0x00	; 0
+ 4d0:	81 f0       	breq	.+32     	; 0x4f2 <__vector_16+0x5a>
+ 4d2:	81 30       	cpi	r24, 0x01	; 1
+ 4d4:	91 05       	cpc	r25, r1
+ 4d6:	09 f0       	breq	.+2      	; 0x4da <__vector_16+0x42>
+ 4d8:	60 c0       	rjmp	.+192    	; 0x59a <__vector_16+0x102>
+ 4da:	1f c0       	rjmp	.+62     	; 0x51a <__vector_16+0x82>
+ 4dc:	84 30       	cpi	r24, 0x04	; 4
+ 4de:	91 05       	cpc	r25, r1
+ 4e0:	c1 f1       	breq	.+112    	; 0x552 <__vector_16+0xba>
+ 4e2:	84 30       	cpi	r24, 0x04	; 4
+ 4e4:	91 05       	cpc	r25, r1
+ 4e6:	98 f0       	brcs	.+38     	; 0x50e <__vector_16+0x76>
+ 4e8:	85 30       	cpi	r24, 0x05	; 5
+ 4ea:	91 05       	cpc	r25, r1
+ 4ec:	09 f0       	breq	.+2      	; 0x4f0 <__vector_16+0x58>
+ 4ee:	55 c0       	rjmp	.+170    	; 0x59a <__vector_16+0x102>
+ 4f0:	39 c0       	rjmp	.+114    	; 0x564 <__vector_16+0xcc>
+  {
+
+    // Address mode: check address and send ACK (and next USI_SLAVE_SEND_DATA) if OK,
+    // else reset USI
+    case USI_SLAVE_CHECK_ADDRESS:
+      if ( ( USIDR == 0 ) || ( ( USIDR >> 1 ) == slaveAddress) )
+ 4f2:	8f b1       	in	r24, 0x0f	; 15
+ 4f4:	88 23       	and	r24, r24
+ 4f6:	31 f0       	breq	.+12     	; 0x504 <__vector_16+0x6c>
+ 4f8:	8f b1       	in	r24, 0x0f	; 15
+ 4fa:	86 95       	lsr	r24
+ 4fc:	90 91 74 00 	lds	r25, 0x0074
+ 500:	89 17       	cp	r24, r25
+ 502:	41 f4       	brne	.+16     	; 0x514 <__vector_16+0x7c>
+      {
+
+         if ( USIDR & 0x01 )
+ 504:	78 9b       	sbis	0x0f, 0	; 15
+ 506:	3f c0       	rjmp	.+126    	; 0x586 <__vector_16+0xee>
+        {
+          overflowState = USI_SLAVE_SEND_DATA;
+ 508:	81 e0       	ldi	r24, 0x01	; 1
+ 50a:	90 e0       	ldi	r25, 0x00	; 0
+ 50c:	3e c0       	rjmp	.+124    	; 0x58a <__vector_16+0xf2>
+      break;
+
+    // Master write data mode: check reply and goto USI_SLAVE_SEND_DATA if OK,
+    // else reset USI
+    case USI_SLAVE_CHECK_REPLY_FROM_SEND_DATA:
+      if ( USIDR )
+ 50e:	8f b1       	in	r24, 0x0f	; 15
+ 510:	88 23       	and	r24, r24
+ 512:	19 f0       	breq	.+6      	; 0x51a <__vector_16+0x82>
+      {
+        // if NACK, the master does not want more data
+        SET_USI_TO_TWI_START_CONDITION_MODE( );
+ 514:	88 ea       	ldi	r24, 0xA8	; 168
+ 516:	8d b9       	out	0x0d, r24	; 13
+ 518:	23 c0       	rjmp	.+70     	; 0x560 <__vector_16+0xc8>
+
+    // copy data from buffer to USIDR and set USI to shift byte
+    // next USI_SLAVE_REQUEST_REPLY_FROM_SEND_DATA
+    case USI_SLAVE_SEND_DATA:
+    
+      USIDR = _onI2CReadFromRegister(currentRegister);
+ 51a:	80 91 65 00 	lds	r24, 0x0065
+ 51e:	e0 91 75 00 	lds	r30, 0x0075
+ 522:	f0 91 76 00 	lds	r31, 0x0076
+ 526:	09 95       	icall
+ 528:	8f b9       	out	0x0f, r24	; 15
+      currentRegister = NO_CURRENT_REGISTER_SET;
+ 52a:	8f ef       	ldi	r24, 0xFF	; 255
+ 52c:	80 93 65 00 	sts	0x0065, r24
+      overflowState = USI_SLAVE_REQUEST_REPLY_FROM_SEND_DATA;
+ 530:	82 e0       	ldi	r24, 0x02	; 2
+ 532:	90 e0       	ldi	r25, 0x00	; 0
+ 534:	90 93 73 00 	sts	0x0073, r25
+ 538:	80 93 72 00 	sts	0x0072, r24
+      SET_USI_TO_SEND_DATA( );
+ 53c:	bd 9a       	sbi	0x17, 5	; 23
+ 53e:	10 c0       	rjmp	.+32     	; 0x560 <__vector_16+0xc8>
+      break;
+
+    // set USI to sample reply from master
+    // next USI_SLAVE_CHECK_REPLY_FROM_SEND_DATA
+    case USI_SLAVE_REQUEST_REPLY_FROM_SEND_DATA:
+      overflowState = USI_SLAVE_CHECK_REPLY_FROM_SEND_DATA;
+ 540:	83 e0       	ldi	r24, 0x03	; 3
+ 542:	90 e0       	ldi	r25, 0x00	; 0
+ 544:	90 93 73 00 	sts	0x0073, r25
+ 548:	80 93 72 00 	sts	0x0072, r24
+      SET_USI_TO_READ_ACK( );
+ 54c:	bd 98       	cbi	0x17, 5	; 23
+ 54e:	1f b8       	out	0x0f, r1	; 15
+ 550:	22 c0       	rjmp	.+68     	; 0x596 <__vector_16+0xfe>
+      break;
+
+    // Master read data mode: set USI to sample data from master, next
+    // USI_SLAVE_GET_DATA_AND_SEND_ACK
+    case USI_SLAVE_REQUEST_DATA:
+      overflowState = USI_SLAVE_GET_DATA_AND_SEND_ACK;
+ 552:	85 e0       	ldi	r24, 0x05	; 5
+ 554:	90 e0       	ldi	r25, 0x00	; 0
+ 556:	90 93 73 00 	sts	0x0073, r25
+ 55a:	80 93 72 00 	sts	0x0072, r24
+      SET_USI_TO_READ_DATA( );
+ 55e:	bd 98       	cbi	0x17, 5	; 23
+ 560:	80 e7       	ldi	r24, 0x70	; 112
+ 562:	1a c0       	rjmp	.+52     	; 0x598 <__vector_16+0x100>
+    // next USI_SLAVE_REQUEST_DATA
+    case USI_SLAVE_GET_DATA_AND_SEND_ACK:
+
+      // The master is writing a value. If we don't have a register yet, it 
+      // must be writing the register value.
+      if (currentRegister == NO_CURRENT_REGISTER_SET)
+ 564:	80 91 65 00 	lds	r24, 0x0065
+ 568:	8f 3f       	cpi	r24, 0xFF	; 255
+ 56a:	11 f4       	brne	.+4      	; 0x570 <__vector_16+0xd8>
+      {
+        // Store the value as the current register.
+        currentRegister = USIDR;
+ 56c:	8f b1       	in	r24, 0x0f	; 15
+ 56e:	09 c0       	rjmp	.+18     	; 0x582 <__vector_16+0xea>
+      }
+      else
+      {
+        // We already have a register value, so it must be storing some data.
+        _onI2CWriteToRegister(currentRegister, USIDR);
+ 570:	80 91 65 00 	lds	r24, 0x0065
+ 574:	6f b1       	in	r22, 0x0f	; 15
+ 576:	e0 91 77 00 	lds	r30, 0x0077
+ 57a:	f0 91 78 00 	lds	r31, 0x0078
+ 57e:	09 95       	icall
+
+        // Currently we only support writing a single value, so we assume that the
+        // transaction is over.
+        currentRegister = NO_CURRENT_REGISTER_SET;
+ 580:	8f ef       	ldi	r24, 0xFF	; 255
+ 582:	80 93 65 00 	sts	0x0065, r24
+      }
+
+      // next USI_SLAVE_REQUEST_DATA
+      overflowState = USI_SLAVE_REQUEST_DATA;
+ 586:	84 e0       	ldi	r24, 0x04	; 4
+ 588:	90 e0       	ldi	r25, 0x00	; 0
+ 58a:	90 93 73 00 	sts	0x0073, r25
+ 58e:	80 93 72 00 	sts	0x0072, r24
+      SET_USI_TO_SEND_ACK( );
+ 592:	1f b8       	out	0x0f, r1	; 15
+ 594:	bd 9a       	sbi	0x17, 5	; 23
+ 596:	8e e7       	ldi	r24, 0x7E	; 126
+ 598:	8e b9       	out	0x0e, r24	; 14
+      break;
+
+  } // end switch
+
+} // end ISR( USI_OVERFLOW_VECTOR )
+ 59a:	ff 91       	pop	r31
+ 59c:	ef 91       	pop	r30
+ 59e:	bf 91       	pop	r27
+ 5a0:	af 91       	pop	r26
+ 5a2:	9f 91       	pop	r25
+ 5a4:	8f 91       	pop	r24
+ 5a6:	7f 91       	pop	r23
+ 5a8:	6f 91       	pop	r22
+ 5aa:	5f 91       	pop	r21
+ 5ac:	4f 91       	pop	r20
+ 5ae:	3f 91       	pop	r19
+ 5b0:	2f 91       	pop	r18
+ 5b2:	0f 90       	pop	r0
+ 5b4:	0f be       	out	0x3f, r0	; 63
+ 5b6:	0f 90       	pop	r0
+ 5b8:	1f 90       	pop	r1
+ 5ba:	18 95       	reti
+
+000005bc <_exit>:
+ 5bc:	f8 94       	cli
+
+000005be <__stop_program>:
+ 5be:	ff cf       	rjmp	.-2      	; 0x5be <__stop_program>

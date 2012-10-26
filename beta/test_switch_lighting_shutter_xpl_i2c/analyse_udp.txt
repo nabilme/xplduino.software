@@ -1,0 +1,33 @@
+## IP ##
+FF FF FF FF FF FF // destination mac
+54 55 58 10 00 26 // source mac
+08 00 // type IP
+45 // version (4) longueur 20 bytes
+00  // differentiated services codepoint
+00 B1 //length (177 ici)
+00 00 // identification
+40 00 //flags (non fragmenté)
+40 //time to live
+11 // protocole: udp
+B5 D2 //header checksum
+C0 A8 01 1A // ip source
+C0 A8 01 FF // ip target
+## UDP ##
+0F 19 // port source
+0F 19 // port target
+00 9D // lenght data
+C5 FE // checksum
+## data ##
+xpl-cmnd
+{
+hop=1
+source=xplduino-lighting.garage
+target=gromain-lighting.garage
+}
+lighting.basic
+{
+command=goto
+device=grange
+level=50
+fade-rate=2
+}
